@@ -1,0 +1,158 @@
+
+.wrapper.crawler {
+    padding-top: 64px;
+}
+
+.wrapper.crawler .crawling-box {
+    margin-top: 64px;
+    font-size: 0;
+}
+.wrapper.crawler .crawling-box input {
+    display: inline-block;
+    vertical-align: middle;
+
+    width: calc(100% - 200px - 32px);
+    height: 100%;
+    font-size: 1.2rem;
+    font-weight: 500;
+    padding: 12px;
+    border-radius: 4px;
+}
+.wrapper.crawler .crawling-box button {
+    display: inline-block;
+    vertical-align: middle;
+
+    width: 200px;
+    height: 100%;
+    margin-left: 32px;
+    font-size: 1.2rem;
+    font-weight: 500;
+    padding: 12px;
+    border-radius: 4px;
+}
+
+.wrapper.crawler .filter-wrapper {
+    margin-top: 32px;
+    position: relative;
+}
+.wrapper.crawler .filter-wrapper select {
+    font-size: 1.2rem;
+    font-weight: 500;
+    padding: 12px 42px 12px 12px;
+    border-radius: 4px;
+    background: #777777 url(/img/chevron-down.svg) no-repeat calc(100% - 12px) 50%;
+    background-size: 18px auto;
+}
+.wrapper.crawler .filter-wrapper select.row-count {
+    position: absolute;
+    right: 0;
+	bottom: 50%;
+    -webkit-transform: translateY(50%);
+	-moz-transform: translateY(50%);
+	-ms-transform: translateY(50%);
+	-o-transform: translateY(50%);
+	transform: translateY(50%);
+}
+
+.wrapper.crawler .crawler-list {
+    margin-top: 32px;
+}
+.wrapper.crawler .crawler-list .crawler {
+    margin-bottom: 32px;
+    border-radius: 4px;
+    overflow: hidden;
+    padding: 16px;
+    background: #555555;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.08), 0 1px 3px 1px rgba(0, 0, 0, 0.16);
+}
+.wrapper.crawler .crawler-list .crawler .progress {
+    display: inline-block;
+    background: #FFFFFF;
+    margin-bottom: 16px;
+    border-radius: 4px;
+    padding: 2px 8px;
+    text-align: right;
+
+    -webkit-transition: all .1s linear;
+    -moz-transition: all .1s linear;
+    -ms-transition: all .1s linear;
+    -o-transition: all .1s linear;
+    transition: all .1s linear;
+}
+.wrapper.crawler .crawler-list .crawler .progress span {
+    color: #333333;
+    font-size: 0.8rem;
+    font-weight: 900;
+}
+.wrapper.crawler .crawler-list .crawler .rows {
+    font-size: 0;
+}
+.wrapper.crawler .crawler-list .crawler .rows .row {
+    display: inline-block;
+    vertical-align: middle;
+    width: 50%;
+    padding: 4px 0;
+    font-size: 0;
+}
+.wrapper.crawler .crawler-list .crawler .rows .row p {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 0.8rem;
+    margin: 0;
+}
+.wrapper.crawler .crawler-list .crawler .rows .row p.col {
+    background: #333333;
+    color: #FFFFFF;
+    font-weight: 700;
+    width: 100px;
+    padding: 4px 0;
+    text-align: center;
+    border-radius: 4px;
+}
+.wrapper.crawler .crawler-list .crawler .rows .row p.value {
+    width: calc(100% - 100px);
+    font-weight: 300;
+    padding: 0 16px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden; 
+}
+.wrapper.crawler .crawler-list .crawler .rows .row.status p.value {
+    font-weight: 900;
+}
+.wrapper.crawler .crawler-list .crawler .error {
+    background: #333333;
+    font-size: 0.8rem;
+    margin-top: 8px;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+.wrapper.crawler .crawler-list .crawler .place {
+    margin-top: 8px;
+    text-align: center;
+    padding: 8px 0;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: underline;
+    background: #777777;
+}
+.wrapper.crawler .crawler-list .crawler .place i {
+    margin-left: 8px;
+}
+.wrapper.crawler .crawler-list .crawler .rows .row.status p.value[c_status="FINISHED"] { color: #7bc043; }
+.wrapper.crawler .crawler-list .crawler .rows .row.status p.value[c_status="RUNNING"] { color: #3b7dd8; }
+.wrapper.crawler .crawler-list .crawler .rows .row.status p.value[c_status="DUPLICATED"] { color: #edc951; }
+.wrapper.crawler .crawler-list .crawler .rows .row.status p.value[c_status="NO_PLACE"] { color: #fe8a71; }
+.wrapper.crawler .crawler-list .crawler .rows .row.status p.value[c_status="ERROR"] { color: #fe4a49; }
+.wrapper.crawler .crawler-list .no-data {
+    text-align: center;
+    font-size: 1.2rem;
+    background: #555555;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.08), 0 1px 3px 1px rgba(0, 0, 0, 0.16);
+    padding: 32px 0;
+}
+.wrapper.crawler .crawler-list .no-data i {
+    margin-right: 16px;
+}

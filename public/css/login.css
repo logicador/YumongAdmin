@@ -1,0 +1,35 @@
+
+.wrapper.login {
+    padding-top: 64px;
+}
+
+.wrapper.login h1.title {
+    text-align: center;
+}
+
+.wrapper.login .login-box {
+    width: 400px;
+    max-width: 100%;
+    margin: 32px auto 0 auto;
+}
+.wrapper.login .login-box p {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+    padding: 32px 0 12px 12px;
+}
+.wrapper.login .login-box input {
+    font-size: 1.2rem;
+    width: 100%;
+    font-weight: 500;
+    padding: 12px;
+    border-radius: 4px;
+}
+.wrapper.login .login-box button {
+    width: 100%;
+    font-size: 1.2rem;
+    font-weight: 500;
+    padding: 12px;
+    border-radius: 4px;
+    margin-top: 64px;
+}

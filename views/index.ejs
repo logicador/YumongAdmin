@@ -1,11 +1,80 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-  </body>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+    <meta http-equiv="cleartype" content="on" />
+    <meta name="description" content="Yumong" />
+    <meta name="keywords"  content="" />
+    <meta name="theme-color" content="#fff">
+
+    <title>여몽 | 관리자</title>
+
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <link rel="stylesheet" type="text/css" href="/css/common.css" />
+
+    <% if (menu == 'login') { %>
+        <link rel="stylesheet" type="text/css" href="/css/login.css" />
+
+    <% } else if (menu == 'main') { %>
+        <link rel="stylesheet" type="text/css" href="/css/main.css" />
+    <% } else if (menu == 'place') { %>
+        <link rel="stylesheet" type="text/css" href="/css/place.css" />
+    <% } else if (menu == 'crawler') { %>
+        <link rel="stylesheet" type="text/css" href="/css/crawler.css" />
+    <% } %>
+</head>
+<body>
+    <input class="js-input-hidden-menu" type="hidden" value="<%=menu%>" />
+
+    <header>
+        <a href="/"><div class="title-wrapper">
+            <p class="title">YUMONG ADMIN</p>
+        </div></a>
+        <div class="controls">
+            <% if (isAdmin) { %><div class="js-div-logout control">LOGOUT</div><% } %>
+        </div>
+        
+    </header>
+
+    <nav class="side-menu">
+        <a href="/"><div class="main-menu <% if (menu == 'main') { %>selected<% } %>">MAIN</div></a>
+        <a href="/place"><div class="main-menu <% if (menu == 'place') { %>selected<% } %>">PLACE</div></a>
+        <a href="/crawler"><div class="main-menu <% if (menu == 'crawler') { %>selected<% } %>">CRAWLER</div></a>
+    </nav>
+
+    <article>
+
+    <% if (menu == 'login') { %>
+        <% include ./login %>
+
+    <% } else if (menu == 'main') { %> 
+        <% include ./main %>
+    <% } else if (menu == 'place') { %> 
+        <% include ./place %>
+    <% } else if (menu == 'crawler') { %> 
+        <% include ./crawler %>
+    <% } %>
+
+    </article>
+
+    <!-- <footer>
+        <div class="wrapper">FOOTER</div>
+    </footer> -->
+
+    <script src="/js/common.js"></script>
+
+    <% if (menu == 'login') { %>
+        <script src="/js/login.js"></script>
+
+    <% } else if (menu == 'main') { %>
+        <script src="/js/main.js"></script>
+    <% } else if (menu == 'place') { %>
+        <script src="/js/place.js"></script>
+    <% } else if (menu == 'crawler') { %>
+        <script src="/js/crawler.js"></script>
+    <% } %>
+
+</body>
 </html>
