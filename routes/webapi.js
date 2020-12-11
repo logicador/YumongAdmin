@@ -37,7 +37,7 @@ router.post('/start/crawling', function(req, res) {
         }
 
         // for windows python3 -> python
-        let command = 'python3 ' + process.env.DIR + '/python/naver.py';
+        let command = 'python ' + process.env.DIR + '/python/naver.py';
         exec(command + ' ' + result.insertId, function(error, stdout, stderr) {
             if (error) {
                 console.log(error);
