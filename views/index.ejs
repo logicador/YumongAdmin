@@ -35,10 +35,10 @@
         <div class="controls">
             <% if (isAdmin) { %><div class="js-div-logout control">LOGOUT</div><% } %>
         </div>
-        
+        <div class="js-div-mobile-menu mobile-menu"><i class="far fa-bars"></i></div>
     </header>
 
-    <nav class="side-menu">
+    <nav class="js-nav-side-menu side-menu">
         <a href="/"><div class="main-menu <% if (menu == 'main') { %>selected<% } %>">MAIN</div></a>
         <a href="/place"><div class="main-menu <% if (menu == 'place') { %>selected<% } %>">PLACE</div></a>
         <a href="/crawler"><div class="main-menu <% if (menu == 'crawler') { %>selected<% } %>">CRAWLER</div></a>

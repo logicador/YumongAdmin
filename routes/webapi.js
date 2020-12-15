@@ -15,13 +15,24 @@ router.post('/start/crawling', function(req, res) {
         return;
     }
 
-    if (cPNId.indexOf('naver.com') != -1) {
-        let find = /\/.+?\?/g.exec(cPNId);
+    if (cPNId.indexOf('http') != -1) {
+        let find = /\/.+\?/g.exec(cPNId);
+        console.log(find);
         let reversed = [];
         if (find) find = find[0];
-        for (let i = find.length - 2; i > 0; i--) {
+        let mFlag = true;
+        if (find.indexOf('m.place.naver.com') != -1) mFlag = false;
+        for (let i = find.length - 1; i > 0; i--) {
             let n = find[i];
-            if (n == '/') break;
+            if (n == '?' || n == 'h' || n == 'o' || n == 'm' || n == 'e') continue;
+
+            if (mFlag) {
+                if (n == '/') break;
+            } else {
+                if (n == '/') continue;
+                mFlag = true;
+            }
+            
             reversed.push(n);
         }
         cPNId = reversed.reverse().join('');
