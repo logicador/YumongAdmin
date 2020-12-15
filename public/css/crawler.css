@@ -12,7 +12,6 @@
     vertical-align: middle;
 
     width: calc(100% - 200px - 32px);
-    height: 100%;
     font-size: 1.2rem;
     font-weight: 500;
     padding: 12px;
@@ -23,7 +22,6 @@
     vertical-align: middle;
 
     width: 200px;
-    height: 100%;
     margin-left: 32px;
     font-size: 1.2rem;
     font-weight: 500;
@@ -155,4 +153,117 @@
 }
 .wrapper.crawler .crawler-list .no-data i {
     margin-right: 16px;
+}
+.wrapper.crawler .more-crawler {
+    width: 100%;
+    padding: 16px 0;
+    margin-bottom: 32px;
+    border-radius: 4px;
+}
+.wrapper.crawler .more-crawler i {
+    font-size: 2rem;
+}
+.wrapper.crawler .more-crawler.hide {
+    display: none;
+}
+
+
+@media (max-width: 1000px) {
+    
+}
+
+
+@media (max-width: 900px) {
+    
+}
+
+
+@media (max-width: 800px) {
+    
+}
+
+
+@media (max-width: 700px) {
+    .wrapper.crawler {
+        padding-top: 48px;
+    }
+    .wrapper.crawler .crawling-box {
+        margin-top: 48px;
+    }
+    .wrapper.crawler .crawling-box input {
+        width: calc(100% - 140px - 24px);
+    }
+    .wrapper.crawler .crawling-box button {
+        width: 140px;
+        margin-left: 24px;
+    }
+    .wrapper.crawler .filter-wrapper {
+        margin-top: 24px;
+    }
+    .wrapper.crawler .crawler-list {
+        margin-top: 24px;
+    }
+    .wrapper.crawler .crawler-list .crawler {
+        margin-bottom: 24px;
+    }
+    .wrapper.crawler .more-crawler {
+        margin-bottom: 24px;
+    }
+}
+
+
+@media (max-width: 600px) {
+    .wrapper.crawler {
+        padding-top: 32px;
+    }
+    .wrapper.crawler .crawling-box {
+        margin-top: 32px;
+    }
+    .wrapper.crawler .crawling-box input {
+        width: calc(100% - 100px - 16px);
+    }
+    .wrapper.crawler .crawling-box button {
+        width: 100px;
+        margin-left: 16px;
+    }
+    .wrapper.crawler .filter-wrapper {
+        margin-top: 16px;
+    }
+    .wrapper.crawler .crawler-list {
+        margin-top: 16px;
+    }
+    .wrapper.crawler .crawler-list .crawler {
+        margin-bottom: 16px;
+    }
+    .wrapper.crawler .more-crawler {
+        margin-bottom: 16px;
+    }
+    .wrapper.crawler .crawler-list .no-data i {
+        margin-right: 8px;
+    }
+}
+
+@media (max-width: 500px) {
+    .wrapper.crawler .crawler-list .crawler {
+        border-radius: 4px;
+        padding: 8px;
+    }
+    .wrapper.crawler .crawler-list .crawler .rows .row {
+        padding: 2px 0;
+    }
+    .wrapper.crawler .crawler-list .crawler .rows .row p.col {
+        width: 80px;
+        padding: 2px 0;
+    }
+    .wrapper.crawler .crawler-list .crawler .rows .row p.value {
+        width: calc(100% - 80px);
+        padding: 0 8px;
+    }
+    .wrapper.crawler .crawler-list .crawler .place {
+        margin-top: 4px;
+        padding: 4px 0;
+    }
+    .wrapper.crawler .crawler-list .no-data {
+        padding: 24px 0;
+    }
 }

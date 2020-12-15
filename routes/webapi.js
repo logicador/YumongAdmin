@@ -15,27 +15,10 @@ router.post('/start/crawling', function(req, res) {
         return;
     }
 
-    if (cPNId.indexOf('http') != -1) {
-        let find = /\/.+\?/g.exec(cPNId);
-        console.log(find);
-        let reversed = [];
-        if (find) find = find[0];
-        let mFlag = true;
-        if (find.indexOf('m.place.naver.com') != -1) mFlag = false;
-        for (let i = find.length - 1; i > 0; i--) {
-            let n = find[i];
-            if (n == '?' || n == 'h' || n == 'o' || n == 'm' || n == 'e') continue;
-
-            if (mFlag) {
-                if (n == '/') break;
-            } else {
-                if (n == '/') continue;
-                mFlag = true;
-            }
-            
-            reversed.push(n);
-        }
-        cPNId = reversed.reverse().join('');
+    // 숫자인지 체크 (정규식)
+    if (!/^[0-9]*$/.test(cPNId)) {
+        res.json({ status: 'ERR_WRONG_PARAMS' });
+        return;
     }
 
     let query = "INSERT INTO t_crawlers (c_p_n_id) VALUES (?)";
@@ -70,16 +53,32 @@ router.get('/get/crawlers', function(req, res) {
     }
 
     let cStatus = req.query.cStatus;
+    let page = req.query.page;
+    let count = 10;
     if (f.isNone(cStatus) || (cStatus != 'RUNNING' && cStatus != 'DUPLICATED' && cStatus != 'FINISHED' && cStatus != 'ERROR' && cStatus != 'NO_PLACE' && cStatus != 'ALL')) {
         res.json({ status: 'ERR_WRONG_PARAMS' });
         return;
     }
 
-    let query = "SELECT * FROM t_crawlers";
-    if (cStatus != 'ALL') { query += " WHERE c_status = ?"; }
-    query += " ORDER BY c_id DESC ";
+    if (f.isNone(page)) page = 0;
+    if (f.isNone(count)) count = 10;
 
-    let params = [cStatus];
+    page = parseInt(page);
+
+    let query = "SELECT SQL_CALC_FOUND_ROWS * FROM t_crawlers";
+    let params = [];
+    if (cStatus != 'ALL') {
+        query += " WHERE c_status = ?";
+        params.push(cStatus);
+    }
+
+    // RUNNING일 경우 전부 다 가져옴
+    if (cStatus != 'RUNNING') {
+        query += " ORDER BY c_id DESC LIMIT ?, ?";
+        params.push(page * count);
+        params.push(count);
+    }
+
     o.mysql.query(query, params, function(error, result) {
         if (error) {
             console.log(error);
@@ -87,7 +86,21 @@ router.get('/get/crawlers', function(req, res) {
             return;
         }
 
-        res.json({ status: 'OK', result: result });
+        let crawlerList = result;
+
+        query = "SELECT FOUND_ROWS() AS totalCount";
+        o.mysql.query(query, params, function(error, result) {
+            if (error) {
+                console.log(error);
+                res.json({ status: 'ERR_MYSQL' });
+                return;
+            }
+
+            res.json({ status: 'OK', result: {
+                totalCount: result[0].totalCount,
+                crawlerList: crawlerList
+            }});
+        });
     });
 });
 

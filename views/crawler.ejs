@@ -9,16 +9,19 @@
 
     <div class="filter-wrapper">
         <select class="js-select-status default">
-            <option value="RUNNING" selected>실행중 (RUNNING)</option>
+            <option value="RUNNING">실행중 (RUNNING)</option>
             <option value="FINISHED">완료됨 (FINISHED)</option>
             <option value="DUPLICATED">중복됨 (DUPLICATED)</option>
             <option value="NO_PLACE">없음 (NO_PLACE)</option>
             <option value="ERROR">오류 (ERROR)</option>
-            <option value="ALL">전체 (ALL)</option>
+            <option value="ALL" selected>전체 (ALL)</option>
         </select>
     </div>
 
-    <div class="js-div-crawler-list crawler-list"></div>
+    <div class="js-div-crawler-list crawler-list">
+    </div>
+
+    <button class="default js-button-more-crawler more-crawler"><i class="far fa-chevron-down"></i></button>
 
 </div>
 
