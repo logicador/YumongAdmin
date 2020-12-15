@@ -16,6 +16,11 @@ function isNone(value) {
 }
 
 
+function intComma(value) {
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+
 function toggleSideMenu() {
     let overlay = document.querySelector('.js-div-overlay');
 
@@ -66,13 +71,5 @@ function initCommon() {
             }
         }
     });
-
-    let cPNId = 'https://place.naver.com/place/11622274?entry=ple';
-    let find = /\/.+\?/g.exec(cPNId);
-    if (cPNId.indexOf('//m.') != -1) {
-        find = /\/.+\/home\?/g.exec(cPNId);
-    }
-
-    console.log(find);
 }
 initCommon();
