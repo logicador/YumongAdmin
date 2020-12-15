@@ -159,6 +159,22 @@ header .controls .control {
     font-size: 1rem;
     margin-left: 16px;
 }
+header .mobile-menu {
+    position: absolute;
+    left: 16px;
+	bottom: 50%;
+    -webkit-transform: translateY(50%);
+	-moz-transform: translateY(50%);
+	-ms-transform: translateY(50%);
+	-o-transform: translateY(50%);
+    transform: translateY(50%);
+    cursor: pointer;
+    display: none;
+}
+header .mobile-menu i {
+    font-size: 2rem;
+    color: #FFFFFF;
+}
 
 nav.side-menu {
     width: 240px;
@@ -172,6 +188,15 @@ nav.side-menu {
     margin-top: 80px;
     overflow-y: auto;
     padding: 16px 0 16px 16px;
+
+    -webkit-transition: all .1s linear;
+    -moz-transition: all .1s linear;
+    -ms-transition: all .1s linear;
+    -o-transition: all .1s linear;
+    transition: all .1s linear;
+}
+nav.side-menu.mobile {
+    left: 0;
 }
 nav.side-menu .main-menu {
     width: 100%;
@@ -197,3 +222,94 @@ footer .wrapper {
     padding: 84px 0;
     text-align: center;
 } */
+
+
+.overlay {
+    position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background: rgba(0, 0, 0, .3);
+	z-index: 997;
+}
+
+
+@media (max-width: 1000px) {
+    html {
+        font-size: 15px;
+    }
+}
+
+
+@media (max-width: 900px) {
+    html {
+        font-size: 14px;
+    }
+    header {
+        height: 70px;
+    }
+    nav.side-menu {
+        margin-top: 70px;
+    }
+    article {
+        margin-top: 70px;
+    }
+    header .title-wrapper {
+        width: 220px;
+    }
+    nav.side-menu {
+        width: 220px;
+    }
+    article {
+        padding-left: 220px;
+    }
+}
+@media (max-width: 800px) {
+    html {
+        font-size: 13px;
+    }
+    header {
+        height: 60px;
+    }
+    nav.side-menu {
+        margin-top: 60px;
+    }
+    article {
+        margin-top: 60px;
+    }
+    header .title-wrapper {
+        width: auto;
+        height: auto;
+        border-right: none;
+        position: absolute;
+        right: 50%;
+        bottom: 50%;
+        -webkit-transform: translate(50%, 50%);
+        -moz-transform: translate(50%, 50%);
+        -ms-transform: translate(50%, 50%);
+        -o-transform: translate(50%, 50%);
+        transform: translate(50%, 50%);
+    }
+    header .title-wrapper .title {
+        position: relative;
+        -webkit-transform: none;
+        -moz-transform: none;
+        -ms-transform: none;
+        -o-transform: none;
+        transform: none;
+    }
+    header .controls {
+        padding-right: 16px;
+    }
+    header .mobile-menu {
+        display: block;
+    }
+    nav.side-menu {
+        z-index: 998;
+        left: -220px;
+    }
+    article {
+        padding-left: 0;
+    }
+}
