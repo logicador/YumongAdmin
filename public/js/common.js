@@ -11,7 +11,7 @@ function noneToDash(value) {
 
 
 function isNone(value) {
-    if (typeof value == 'undefined' || value == null || value == '') return true;
+    if (typeof value == 'undefined' || value == null || value === '') return true;
     return false;
 }
 

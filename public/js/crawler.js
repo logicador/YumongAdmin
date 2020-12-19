@@ -6,6 +6,7 @@ const buttonStartCrawling = document.querySelector('.js-button-start-crawling');
 const divCrawlerList = document.querySelector('.js-div-crawler-list');
 const selectStatus = document.querySelector('.js-select-status');
 const buttonMoreCrawler = document.querySelector('.js-button-more-crawler');
+const divRowCount = document.querySelector('.js-div-row-count');
 // let isEndOfCrawler = false;
 let page = 0;
 
@@ -101,6 +102,8 @@ function getCrawlers() {
             html += getCrawlerHtml(crawler);
         }
 
+        divRowCount.querySelector('span').innerText = intComma(totalCount);
+
         if (crawlerList.length > 0) {
             divCrawlerList.insertAdjacentHTML('beforeend', html);
 
@@ -117,8 +120,31 @@ function getCrawlers() {
             if (divCrawlerList.querySelector('.js-div-no-data')) {
                 divCrawlerList.querySelector('.js-div-no-data').remove();
             }
+
+            divCrawlerList.querySelectorAll('.js-div-crawler').forEach(function(divCrawler) {
+                if (divCrawler.querySelector('.js-div-remove')) {
+                    divCrawler.querySelector('.js-div-remove').addEventListener('click', function() {
+                        divCrawler.remove();
+    
+                        if (divCrawlerList.querySelectorAll('.js-div-crawler').length == 0) {
+                            buttonMoreCrawler.classList.add('hide');
+                            divCrawlerList.innerHTML = getNoDataHtml();
+                        }
+    
+                        fetch('/webapi/remove/crawler', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                cId: divCrawler.getAttribute('c_id')
+                            })
+                        })
+                        .then(function(data) { return data.json(); })
+                        .then(function(response) { });
+                    });
+                }
+            });
         } else {
-            divCrawlerList.innerHTML = '<div class="js-div-no-data no-data"><i class="fas fa-times-circle"></i>해당되는 크롤러가 없습니다.</div>';
+            divCrawlerList.innerHTML = getNoDataHtml();
         }
 
         // 마지막인지 확인 후 더보기 버튼 없애기
@@ -142,7 +168,7 @@ function updateCrawlers() {
     // RUNNING 상태인 크롤러가 없음.
     if (cIdList.length == 0) {
         if (!divCrawlerList.querySelector('.js-div-no-data')) {
-            divCrawlerList.innerHTML = '<div class="js-div-no-data no-data"><i class="fas fa-times-circle"></i>해당되는 크롤러가 없습니다.</div>';
+            divCrawlerList.innerHTML = getNoDataHtml();
         }
         return;
     }
@@ -189,6 +215,8 @@ function updateCrawlers() {
             pCreatedDateValue.innerText = crawler.c_created_date;
             pUpdatedDateValue.innerText = crawler.c_updated_date;
         }
+
+        divRowCount.querySelector('span').innerText = intComma(crawlerList.length);
     });
 }
 
@@ -198,7 +226,10 @@ function getCrawlerHtml(crawler) {
     html += '<div c_id="' + crawler.c_id + '" class="js-div-crawler crawler test">';
         if (crawler.c_status == 'RUNNING') {
             html += '<div class="progress" style="width: ' + ((crawler.c_progress < 10) ? '' : crawler.c_progress + '%') + '"><span>' + crawler.c_progress + '%</span></div>';
+        } else if (crawler.c_status == 'DUPLICATED' || crawler.c_status == 'NO_PLACE' || crawler.c_status == 'ERROR') {
+            html += '<div class="js-div-remove remove"><i class="fal fa-times"></i></div>';
         }
+        html += '<div class="js-div-remove remove"><i class="fal fa-times"></i></div>';
         html += '<div class="rows">';
             html += '<div class="row"><p class="col">ID</p>';
                 html += '<p class="value">' + crawler.c_id + '</p>';
@@ -230,6 +261,9 @@ function getCrawlerHtml(crawler) {
             html += '<div class="row updated-date"><p class="col">UPDATED</p>';
                 html += '<p class="value">' + crawler.c_updated_date + '</p>';
             html += '</div>';
+            html += '<div class="row admin"><p class="col">ADMIN</p>';
+                html += '<p class="value">' + crawler.c_admin + '</p>';
+            html += '</div>';
         html += '</div>';
         if (crawler.c_status == 'ERROR') {
             html += '<div class="error">';
@@ -241,6 +275,11 @@ function getCrawlerHtml(crawler) {
         }
     html += '</div>';
     return html;
+}
+
+
+function getNoDataHtml() {
+    return '<div class="js-div-no-data no-data"><i class="fas fa-times-circle"></i>해당되는 크롤러가 없습니다.</div>';
 }
 
 

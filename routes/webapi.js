@@ -144,11 +144,38 @@ router.post('/get/crawler/progress', function(req, res) {
 });
 
 
+router.post('/remove/crawler', (req, res) => {
+    if (!req.session.isAdmin) {
+        res.json({ status: 'ERR_PERMISSION' });
+        return;
+    }
+
+    let cId = req.body.cId;
+    if (f.isNone(cId)) {
+        res.json({ status: 'ERR_WRONG_PARAMS' });
+        return;
+    }
+
+    let query = "DELETE FROM t_crawlers WHERE c_id = ?";
+    let params = [cId];
+
+    o.mysql.query(query, params, function(error, result) {
+        if (error) {
+            console.log(error);
+            res.json({ status: 'ERR_MYSQL' });
+            return;
+        }
+
+        res.json({ status: 'OK' });
+    });
+});
+
+
 router.post('/login', (req, res) => {
     let id = req.body.id;
     let password = req.body.password;
 
-    if (id === process.env.ADMIN_ID && password === process.env.ADMIN_PASSWORD) {
+    if ((id === process.env.ADMIN_ID_1 || id === process.env.ADMIN_ID_2) && password === process.env.ADMIN_PASSWORD) {
         req.session.isAdmin = true;
         req.session.save(function() {
             res.json({ status: 'OK' });
