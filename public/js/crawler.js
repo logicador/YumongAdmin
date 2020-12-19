@@ -229,7 +229,7 @@ function getCrawlerHtml(crawler) {
         } else if (crawler.c_status == 'DUPLICATED' || crawler.c_status == 'NO_PLACE' || crawler.c_status == 'ERROR') {
             html += '<div class="js-div-remove remove"><i class="fal fa-times"></i></div>';
         }
-        html += '<div class="js-div-remove remove"><i class="fal fa-times"></i></div>';
+        // html += '<div class="js-div-remove remove"><i class="fal fa-times"></i></div>';
         html += '<div class="rows">';
             html += '<div class="row"><p class="col">ID</p>';
                 html += '<p class="value">' + crawler.c_id + '</p>';
