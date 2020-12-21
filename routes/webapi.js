@@ -21,8 +21,8 @@ router.post('/start/crawling', function(req, res) {
         return;
     }
 
-    let query = "INSERT INTO t_crawlers (c_p_n_id) VALUES (?)";
-    let params = [cPNId];
+    let query = "INSERT INTO t_crawlers (c_p_n_id, c_admin) VALUES (?, ?)";
+    let params = [cPNId, req,session.adminId];
     o.mysql.query(query, params, function(error, result) {
         if (error) {
             console.log(error);
@@ -175,8 +175,9 @@ router.post('/login', (req, res) => {
     let id = req.body.id;
     let password = req.body.password;
 
-    if ((id === process.env.ADMIN_ID_1 || id === process.env.ADMIN_ID_2) && password === process.env.ADMIN_PASSWORD) {
+    if ((id === process.env.ADMIN_ID_1 || id === process.env.ADMIN_ID_2 || id === process.env.ADMIN_ID_3) && password === process.env.ADMIN_PASSWORD) {
         req.session.isAdmin = true;
+        req.session.adminId = id;
         req.session.save(function() {
             res.json({ status: 'OK' });
         });
