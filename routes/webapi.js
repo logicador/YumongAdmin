@@ -22,7 +22,7 @@ router.post('/start/crawling', function(req, res) {
     }
 
     let query = "INSERT INTO t_crawlers (c_p_n_id, c_admin) VALUES (?, ?)";
-    let params = [cPNId, req,session.adminId];
+    let params = [cPNId, req.session.adminId];
     o.mysql.query(query, params, function(error, result) {
         if (error) {
             console.log(error);
