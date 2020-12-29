@@ -67,14 +67,14 @@ global.f = {}; // 함수
 global.c = {}; // 상수
 
 // mysql connection
-global.o.mysql = mysql.createConnection({
-    host: process.env.MYSQL_HOST,
-    user: process.env.MYSQL_USER,
-    port: process.env.MYSQL_PORT,
-    password: process.env.MYSQL_PASSWORD,
-    database: process.env.MYSQL_DATABASE,
-    dateStrings: 'date'
-});
+// global.o.mysql = mysql.createConnection({
+//     host: process.env.MYSQL_HOST,
+//     user: process.env.MYSQL_USER,
+//     port: process.env.MYSQL_PORT,
+//     password: process.env.MYSQL_PASSWORD,
+//     database: process.env.MYSQL_DATABASE,
+//     dateStrings: 'date'
+// });
 
 // none check
 global.f.isNone = function(value) {

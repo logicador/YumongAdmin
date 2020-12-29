@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const exec = require('child_process').exec;
+const getConnection = require('../base/database');
 
 
 router.post('/start/crawling', function(req, res) {
@@ -21,28 +22,60 @@ router.post('/start/crawling', function(req, res) {
         return;
     }
 
-    let query = "INSERT INTO t_crawlers (c_p_n_id, c_admin) VALUES (?, ?)";
-    let params = [cPNId, req.session.adminId];
-    o.mysql.query(query, params, function(error, result) {
+    getConnection((error, conn) => {
         if (error) {
             console.log(error);
-            res.json({ status: 'ERR_MYSQL' });
+            res.json({ status: 'ERR_MYSQL_POOL' });
             return;
         }
 
-        // for windows python3 -> python
-        let command = 'python ' + process.env.DIR + '/python/naver.py';
-        exec(command + ' ' + result.insertId, function(error, stdout, stderr) {
+        let query = "INSERT INTO t_crawlers (c_p_n_id, c_admin) VALUES (?, ?)";
+        let params = [cPNId, req.session.adminId];
+
+        conn.query(query, params, (error, result) => {
             if (error) {
                 console.log(error);
-                console.log('stderr', stderr);
+                res.json({ status: 'ERR_MYSQL' });
                 return;
             }
+
+            conn.release();
+
+            let command = 'python ' + process.env.DIR + '/python/naver.py';
+            exec(command + ' ' + result.insertId, (error, stdout, stderr) => {
+                if (error) {
+                    console.log(error);
+                    console.log('stderr', stderr);
+                    return;
+                }
+            });
+
+            res.json({ status: 'OK' });
         });
-    
-        // res.json({ status: 'OK', cId: result.insertId });
-        res.json({ status: 'OK' });
     });
+
+    // let query = "INSERT INTO t_crawlers (c_p_n_id, c_admin) VALUES (?, ?)";
+    // let params = [cPNId, req.session.adminId];
+    // o.mysql.query(query, params, function(error, result) {
+    //     if (error) {
+    //         console.log(error);
+    //         res.json({ status: 'ERR_MYSQL' });
+    //         return;
+    //     }
+
+    //     // for windows python3 -> python
+    //     let command = 'python ' + process.env.DIR + '/python/naver.py';
+    //     exec(command + ' ' + result.insertId, function(error, stdout, stderr) {
+    //         if (error) {
+    //             console.log(error);
+    //             console.log('stderr', stderr);
+    //             return;
+    //         }
+    //     });
+    
+    //     // res.json({ status: 'OK', cId: result.insertId });
+    //     res.json({ status: 'OK' });
+    // });
 });
 
 
@@ -79,29 +112,63 @@ router.get('/get/crawlers', function(req, res) {
         params.push(count);
     }
 
-    o.mysql.query(query, params, function(error, result) {
+    getConnection((error, conn) => {
         if (error) {
             console.log(error);
-            res.json({ status: 'ERR_MYSQL' });
+            res.json({ status: 'ERR_MYSQL_POOL' });
             return;
         }
 
-        let crawlerList = result;
-
-        query = "SELECT FOUND_ROWS() AS totalCount";
-        o.mysql.query(query, params, function(error, result) {
+        conn.query(query, params, (error, result) => {
             if (error) {
                 console.log(error);
                 res.json({ status: 'ERR_MYSQL' });
                 return;
             }
 
-            res.json({ status: 'OK', result: {
-                totalCount: result[0].totalCount,
-                crawlerList: crawlerList
-            }});
+            let crawlerList = result;
+
+            query = "SELECT FOUND_ROWS() AS totalCount";
+            conn.query(query, params, (error, result) => {
+                if (error) {
+                    console.log(error);
+                    res.json({ status: 'ERR_MYSQL' });
+                    return;
+                }
+
+                conn.release();
+    
+                res.json({ status: 'OK', result: {
+                    totalCount: result[0].totalCount,
+                    crawlerList: crawlerList
+                }});
+            });
         });
     });
+
+    // o.mysql.query(query, params, function(error, result) {
+    //     if (error) {
+    //         console.log(error);
+    //         res.json({ status: 'ERR_MYSQL' });
+    //         return;
+    //     }
+
+    //     let crawlerList = result;
+
+    //     query = "SELECT FOUND_ROWS() AS totalCount";
+    //     o.mysql.query(query, params, function(error, result) {
+    //         if (error) {
+    //             console.log(error);
+    //             res.json({ status: 'ERR_MYSQL' });
+    //             return;
+    //         }
+
+    //         res.json({ status: 'OK', result: {
+    //             totalCount: result[0].totalCount,
+    //             crawlerList: crawlerList
+    //         }});
+    //     });
+    // });
 });
 
 
@@ -131,15 +198,35 @@ router.post('/get/crawler/progress', function(req, res) {
         params.push(cId);
     }
 
-    o.mysql.query(query, params, function(error, result) {
+    getConnection((error, conn) => {
         if (error) {
             console.log(error);
-            res.json({ status: 'ERR_MYSQL' });
+            res.json({ status: 'ERR_MYSQL_POOL' });
             return;
         }
 
-        res.json({ status: 'OK', result: result });
+        conn.query(query, params, (error, result) => {
+            if (error) {
+                console.log(error);
+                res.json({ status: 'ERR_MYSQL' });
+                return;
+            }
+
+            conn.release();
+    
+            res.json({ status: 'OK', result: result });
+        });
     });
+
+    // o.mysql.query(query, params, function(error, result) {
+    //     if (error) {
+    //         console.log(error);
+    //         res.json({ status: 'ERR_MYSQL' });
+    //         return;
+    //     }
+
+    //     res.json({ status: 'OK', result: result });
+    // });
 
 });
 
@@ -159,15 +246,35 @@ router.post('/remove/crawler', (req, res) => {
     let query = "DELETE FROM t_crawlers WHERE c_id = ?";
     let params = [cId];
 
-    o.mysql.query(query, params, function(error, result) {
+    getConnection((error, conn) => {
         if (error) {
             console.log(error);
-            res.json({ status: 'ERR_MYSQL' });
+            res.json({ status: 'ERR_MYSQL_POOL' });
             return;
         }
 
-        res.json({ status: 'OK' });
+        conn.query(query, params, (error, result) => {
+            if (error) {
+                console.log(error);
+                res.json({ status: 'ERR_MYSQL' });
+                return;
+            }
+
+            conn.release();
+    
+            res.json({ status: 'OK' });
+        });
     });
+
+    // o.mysql.query(query, params, function(error, result) {
+    //     if (error) {
+    //         console.log(error);
+    //         res.json({ status: 'ERR_MYSQL' });
+    //         return;
+    //     }
+
+    //     res.json({ status: 'OK' });
+    // });
 });
 
 
