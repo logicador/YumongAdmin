@@ -198,7 +198,7 @@ def main(argv):
         # Start 이미지
 
         os.mkdir('public/images/places/' + str(p_id))
-        os.mkdir('public/images/places/' + str(p_id) + '/blog')
+        # os.mkdir('public/images/places/' + str(p_id) + '/blog')
         image_list = list()
         is_set_thumbnail = False
         for image in images:
