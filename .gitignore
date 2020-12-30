@@ -125,5 +125,5 @@ dist
 
 .DS_Store
 public/images/*
-python/*
+# python/*
 .jshintrc
