@@ -152,10 +152,14 @@ function updateCrawlers() {
             let crawler = crawlerList[i];
             let divCrawler = divCrawlerList.querySelector('.js-div-crawler[c_id="' + crawler.c_id + '"]');
             
-            // RUNNING이, FINISHED 아닌 크롤러 제거
-            if (crawler.c_status == 'DUPLICATED' || crawler.c_status == 'NO_PLACE' || crawler.c_status == 'ERROR') {
+            // RUNNING이 아닌 크롤러는 제거
+            if (crawler.c_status != 'RUNNING') {
                 divCrawler.remove();
-                alert('[' + crawler.c_status + '] ' + crawler.c_p_n_id);
+
+                // FINISHED가 아니면 alert로 알려주기
+                if (crawler.c_status != 'FINISHED') {
+                    alert('[' + crawler.c_status + '] ' + crawler.c_p_n_id);
+                }
             }
             
             let divProgress = divCrawler.querySelector('.progress');
@@ -176,7 +180,7 @@ function updateCrawlers() {
             pNameValue.innerText = crawler.c_p_name;
             pCategoryValue.innerText = crawler.c_p_category;
             pAddressValue.innerText = crawler.c_p_address;
-            // pBlogCountValue.innerText = crawler.c_blog_count;
+            pBlogCountValue.innerText = crawler.c_blog_count;
             pImageCountValue.innerText = crawler.c_image_count;
             pCreatedDateValue.innerText = crawler.c_created_date;
             pUpdatedDateValue.innerText = crawler.c_updated_date;
@@ -196,7 +200,6 @@ function getCrawlerHtml(crawler) {
             html += '<div class="js-div-remove control remove"><i class="fal fa-times"></i></div>';
             html += '<div class="js-div-recrawling control recrawling"><i class="fab fa-python"></i></div>';
         }
-        // html += '<div class="js-div-remove remove"><i class="fal fa-times"></i></div>';
         html += '<div class="rows">';
             html += '<div class="row"><p class="col">ID</p>';
                 html += '<p class="value">' + crawler.c_id + '</p>';
@@ -213,9 +216,9 @@ function getCrawlerHtml(crawler) {
             html += '<div class="row address"><p class="col">ADDRESS</p>';
                 html += '<p class="value">' + noneToDash(crawler.c_p_address) + '</p>';
             html += '</div>';
-            // html += '<div class="row blog-count"><p class="col">BLOG</p>';
-            //     html += '<p class="value">' + intComma(crawler.c_blog_count) + '</p>';
-            // html += '</div>';
+            html += '<div class="row blog-count"><p class="col">BLOG</p>';
+                html += '<p class="value">' + intComma(crawler.c_blog_count) + '</p>';
+            html += '</div>';
             html += '<div class="row image-count"><p class="col">IMAGE</p>';
                 html += '<p class="value">' + intComma(crawler.c_image_count) + '</p>';
             html += '</div>';
