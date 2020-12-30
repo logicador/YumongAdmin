@@ -3,6 +3,31 @@
     padding-top: 64px;
 }
 
+.wrapper.crawler .refresh {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    width: 64px;
+    height: 64px;
+    background: #FFFFFF;
+    border-radius: 50%;
+    z-index: 996;
+    cursor: pointer;
+    box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0,0,0,.12);
+}
+.wrapper.crawler .refresh i {
+    position: absolute;
+    color: #333333;
+    font-size: 28px;
+    right: 50%;
+    bottom: 50%;
+    -webkit-transform: translate(50%, 50%);
+    -moz-transform: translate(50%, 50%);
+    -ms-transform: translate(50%, 50%);
+    -o-transform: translate(50%, 50%);
+    transform: translate(50%, 50%);
+}
+
 .wrapper.crawler .crawling-box {
     margin-top: 64px;
     font-size: 0;
@@ -84,17 +109,23 @@
     font-size: 0.8rem;
     font-weight: 900;
 }
-.wrapper.crawler .crawler-list .crawler .remove {
+.wrapper.crawler .crawler-list .crawler .control {
     position: absolute;
     right: 16px;
-    top: 16px;
     cursor: pointer;
     width: 50px;
     height: 50px;
     background: #333333;
     border-radius: 50%;
 }
-.wrapper.crawler .crawler-list .crawler .remove i {
+.wrapper.crawler .crawler-list .crawler .control.remove {
+    top: 16px;
+}
+.wrapper.crawler .crawler-list .crawler .control.recrawling {
+    top: 74px;
+}
+.wrapper.crawler .crawler-list .crawler .control.recrawling i,
+.wrapper.crawler .crawler-list .crawler .control.remove i {
     position: absolute;
     color: #FFFFFF;
     font-size: 20px;
@@ -244,10 +275,10 @@
         margin-top: 32px;
     }
     .wrapper.crawler .crawling-box input {
-        width: calc(100% - 100px - 16px);
+        width: calc(100% - 120px - 16px);
     }
     .wrapper.crawler .crawling-box button {
-        width: 100px;
+        width: 120px;
         margin-left: 16px;
     }
     .wrapper.crawler .filter-wrapper {
@@ -268,13 +299,36 @@
 }
 
 @media (max-width: 500px) {
+    .wrapper.crawler .refresh {
+        bottom: 24px;
+        right: 24px;
+        width: 48px;
+        height: 48px;
+    }
+    .wrapper.crawler .refresh i {
+        font-size: 20px;
+    }
     .wrapper.crawler .crawler-list .crawler {
         border-radius: 4px;
         padding: 8px;
     }
-    .wrapper.crawler .crawler-list .crawler .remove {
+    .wrapper.crawler .crawler-list .crawler .control {
         right: 8px;
+    }
+    .wrapper.crawler .crawler-list .crawler .control {
+        right: 8px;
+        width: 36px;
+        height: 36px;
+    }
+    .wrapper.crawler .crawler-list .crawler .control.remove {
         top: 8px;
+    }
+    .wrapper.crawler .crawler-list .crawler .control.recrawling {
+        top: 48px;
+    }
+    .wrapper.crawler .crawler-list .crawler .control.recrawling i,
+    .wrapper.crawler .crawler-list .crawler .control.remove i {
+        font-size: 16px;
     }
     .wrapper.crawler .crawler-list .crawler .rows .row {
         padding: 2px 0;

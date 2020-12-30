@@ -1,5 +1,6 @@
 
 const html = document.querySelector('html');
+const divRefresh = document.querySelector('.js-div-refresh');
 const divCrawlingBox = document.querySelector('.js-div-crawling-box');
 const inputCPNId = document.querySelector('.js-input-c-p-n-id');
 const buttonStartCrawling = document.querySelector('.js-button-start-crawling');
@@ -11,51 +12,7 @@ const divRowCount = document.querySelector('.js-div-row-count');
 let page = 0;
 
 
-function startCrawling() {
-    let cPNId = inputCPNId.value.trim();
-    if (cPNId === '') {
-        alert('네이버 Place 아이디를 입력해주세요.');
-        return;
-    }
-
-    // http가 포함되었다면 (url이라면)
-    if (cPNId.indexOf('http') != -1) {
-        let find = /\/.+\?/g.exec(cPNId); // '/' '?' 사이의 문자열 탐색
-        let reversed = [];
-        if (find) {
-            find = find[0]; // 찾은 문자열 0번방에 있음
-        } else {
-            alert('올바르지 않은 입력값입니다.');
-            return;
-        }
-
-        // 모바일 url의 경우 '/' 를 두번 걸러야하기 때문에 flag로 확인
-        let mFlag = true;
-        if (find.indexOf('m.place.naver.com') != -1) mFlag = false;
-        // 뒤에서부터 돌면서 ?, h, o, m, e 거름
-        for (let i = find.length - 1; i > 0; i--) {
-            let n = find[i];
-            if (n == '?' || n == 'h' || n == 'o' || n == 'm' || n == 'e') continue;
-
-            if (mFlag) {
-                if (n == '/') break;
-            } else { // 모바일일 경우 '/' 한번 더
-                if (n == '/') continue;
-                mFlag = true;
-            }
-            
-            reversed.push(n);
-        }
-        // 반복문을 뒤로 돌리며 push하였기때문에 reverse()해줌
-        cPNId = reversed.reverse().join('');
-    }
-
-    // 숫자인지 체크 (정규식)
-    if (!/^[0-9]*$/.test(cPNId)) {
-        alert('올바르지 않은 입력값입니다.');
-        return;
-    }
-
+function startCrawling(cPNId) {
     fetch('/webapi/start/crawling', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -142,6 +99,12 @@ function getCrawlers() {
                         .then(function(response) { });
                     });
                 }
+                if (divCrawler.querySelector('.js-div-recrawling')) {
+                    divCrawler.querySelector('.js-div-recrawling').addEventListener('click', function() {
+                        let cPNId = this.parentElement.querySelector('.rows .row.nid p.value').innerText;
+                        startCrawling(cPNId);
+                    });
+                }
             });
         } else {
             divCrawlerList.innerHTML = getNoDataHtml();
@@ -189,8 +152,11 @@ function updateCrawlers() {
             let crawler = crawlerList[i];
             let divCrawler = divCrawlerList.querySelector('.js-div-crawler[c_id="' + crawler.c_id + '"]');
             
-            // RUNNING이 아닌 크롤러 제거
-            if (crawler.c_status != 'RUNNING') { divCrawler.remove(); }
+            // RUNNING이, FINISHED 아닌 크롤러 제거
+            if (crawler.c_status == 'DUPLICATED' || crawler.c_status == 'NO_PLACE' || crawler.c_status == 'ERROR') {
+                divCrawler.remove();
+                alert('[' + crawler.c_status + '] ' + crawler.c_p_n_id);
+            }
             
             let divProgress = divCrawler.querySelector('.progress');
             let divProgressSpan = divProgress.querySelector('span');
@@ -223,11 +189,12 @@ function updateCrawlers() {
 
 function getCrawlerHtml(crawler) {
     let html = '';
-    html += '<div c_id="' + crawler.c_id + '" class="js-div-crawler crawler test">';
+    html += '<div c_id="' + crawler.c_id + '" class="js-div-crawler crawler">';
         if (crawler.c_status == 'RUNNING') {
             html += '<div class="progress" style="width: ' + ((crawler.c_progress < 10) ? '' : crawler.c_progress + '%') + '"><span>' + crawler.c_progress + '%</span></div>';
         } else if (crawler.c_status == 'DUPLICATED' || crawler.c_status == 'NO_PLACE' || crawler.c_status == 'ERROR') {
-            html += '<div class="js-div-remove remove"><i class="fal fa-times"></i></div>';
+            html += '<div class="js-div-remove control remove"><i class="fal fa-times"></i></div>';
+            html += '<div class="js-div-recrawling control recrawling"><i class="fab fa-python"></i></div>';
         }
         // html += '<div class="js-div-remove remove"><i class="fal fa-times"></i></div>';
         html += '<div class="rows">';
@@ -285,7 +252,59 @@ function getNoDataHtml() {
 
 function initCrawler() {
 
-    buttonStartCrawling.addEventListener('click', startCrawling);
+    divRefresh.addEventListener('click', function() {
+        divCrawlerList.innerHTML = '';
+        page = 0;
+        getCrawlers();
+    });
+
+    buttonStartCrawling.addEventListener('click', function() {
+        let cPNId = inputCPNId.value.trim();
+        if (cPNId === '') {
+            alert('네이버 Place 아이디를 입력해주세요.');
+            return;
+        }
+
+        // http가 포함되었다면 (url이라면)
+        if (cPNId.indexOf('http') != -1) {
+            let find = /\/.+\?/g.exec(cPNId); // '/' '?' 사이의 문자열 탐색
+            let reversed = [];
+            if (find) {
+                find = find[0]; // 찾은 문자열 0번방에 있음
+            } else {
+                alert('올바르지 않은 입력값입니다.');
+                return;
+            }
+
+            // 모바일 url의 경우 '/' 를 두번 걸러야하기 때문에 flag로 확인
+            let mFlag = true;
+            if (find.indexOf('m.place.naver.com') != -1) mFlag = false;
+            // 뒤에서부터 돌면서 ?, h, o, m, e 거름
+            for (let i = find.length - 1; i > 0; i--) {
+                let n = find[i];
+                if (n == '?' || n == 'h' || n == 'o' || n == 'm' || n == 'e') continue;
+
+                if (mFlag) {
+                    if (n == '/') break;
+                } else { // 모바일일 경우 '/' 한번 더
+                    if (n == '/') continue;
+                    mFlag = true;
+                }
+                
+                reversed.push(n);
+            }
+            // 반복문을 뒤로 돌리며 push하였기때문에 reverse()해줌
+            cPNId = reversed.reverse().join('');
+        }
+
+        // 숫자인지 체크 (정규식)
+        if (!/^[0-9]*$/.test(cPNId)) {
+            alert('올바르지 않은 입력값입니다.');
+            return;
+        }
+
+        startCrawling(cPNId);
+    });
 
     selectStatus.addEventListener('change', function() {
         divCrawlerList.innerHTML = '';

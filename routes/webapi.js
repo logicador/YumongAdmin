@@ -41,7 +41,7 @@ router.post('/start/crawling', function(req, res) {
 
             conn.release();
 
-            let command = 'python ' + process.env.DIR + '/python/naver.py';
+            let command = process.env.PYTHON_CMD + '/python/naver.py';
             exec(command + ' ' + result.insertId, (error, stdout, stderr) => {
                 if (error) {
                     console.log(error);
@@ -87,14 +87,13 @@ router.get('/get/crawlers', function(req, res) {
 
     let cStatus = req.query.cStatus;
     let page = req.query.page;
-    let count = 10;
+    let count = 20;
     if (f.isNone(cStatus) || (cStatus != 'RUNNING' && cStatus != 'DUPLICATED' && cStatus != 'FINISHED' && cStatus != 'ERROR' && cStatus != 'NO_PLACE' && cStatus != 'ALL')) {
         res.json({ status: 'ERR_WRONG_PARAMS' });
         return;
     }
 
     if (f.isNone(page)) page = 0;
-    if (f.isNone(count)) count = 10;
 
     page = parseInt(page);
 
@@ -265,16 +264,6 @@ router.post('/remove/crawler', (req, res) => {
             res.json({ status: 'OK' });
         });
     });
-
-    // o.mysql.query(query, params, function(error, result) {
-    //     if (error) {
-    //         console.log(error);
-    //         res.json({ status: 'ERR_MYSQL' });
-    //         return;
-    //     }
-
-    //     res.json({ status: 'OK' });
-    // });
 });
 
 
