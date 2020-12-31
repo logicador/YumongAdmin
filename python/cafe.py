@@ -1,6 +1,5 @@
 import pymysql
 import os
-import shutil
 import platform
 
 
@@ -55,13 +54,11 @@ def main():
         if 'cafe.naver.com' in pb_url:
             res = 'REMOVE'
             pb_thumbnail = result['pb_thumbnail']
-            shutil.rmtree('D:/YumongAdmin/public' + pb_thumbnail)
+            os.remove('D:/YumongAdmin/public' + pb_thumbnail)
 
             query = "DELETE FROM t_place_blogs WHERE pb_id = %s"
             cursor.execute(query, (pb_id))
             conn.commit()
-            
-            break
 
         print('FINISH', pb_id, idx + 1, '/', len(results), res)
 
