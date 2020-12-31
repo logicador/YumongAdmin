@@ -46,21 +46,21 @@ def main():
 
     for idx, result in enumerate(results):
         pb_id = result['pb_id']
-        print('Start', pb_id, idx + 1, '/', len(results))
+        print('START', pb_id, idx + 1, '/', len(results))
         pb_url = result['pb_url']
 
-        res = 'MAINTAIN'
-
         if 'cafe.naver.com' in pb_url:
-            res = 'REMOVE'
             pb_thumbnail = result['pb_thumbnail']
+
+            if pb_thumbnail == '': continue
+
             os.remove('D:/YumongAdmin/public' + pb_thumbnail)
 
             query = "DELETE FROM t_place_blogs WHERE pb_id = %s"
             cursor.execute(query, (pb_id))
             conn.commit()
 
-        print('FINISH', pb_id, idx + 1, '/', len(results), res)
+            print('REMOVE', pb_id, idx + 1, '/', len(results))
 
 
 if __name__ == '__main__':
