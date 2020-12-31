@@ -289,7 +289,7 @@ def main(argv):
             
             for item in items:
                 # 카페 수집 X
-                if 'cafe.naver.com' in item['url']: continue
+                if item['type'] == 'cafe': continue
 
                 writed_date_splited = item['date'].split('.')
 
