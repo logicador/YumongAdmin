@@ -12,7 +12,7 @@ from datetime import date, timedelta, datetime
 
 
 def get_env_path():
-    env_path = 'C:/Users/logicador/VSCodeProjects/YumongAdmin/.env'
+    env_path = 'D:/YumongAdmin/.env'
     if 'macOS' in platform.platform(): env_path = '~/VSCodeProjects/YumongAdmin/.env'
     return env_path
 
@@ -198,7 +198,7 @@ def main(argv):
         # Start 이미지
 
         os.mkdir('public/images/places/' + str(p_id))
-        # os.mkdir('public/images/places/' + str(p_id) + '/blog')
+        os.mkdir('public/images/places/' + str(p_id) + '/blog')
         image_list = list()
         is_set_thumbnail = False
         for image in images:
@@ -239,7 +239,7 @@ def main(argv):
                 is_set_thumbnail = True
 
             image_list.append([p_id, image_path])
-            progress += 55 / len(images)
+            progress += 30 / len(images)
             query = "UPDATE t_crawlers SET c_progress = %s, c_image_count = c_image_count + 1, c_updated_date = NOW() WHERE c_id = %s"
             cursor.execute(query, (progress, c_id))
             conn.commit()
@@ -299,28 +299,27 @@ def main(argv):
                 pb_thumbnail = '' 
                 
                 # 블로그 이미지 가져오기
-                # 용량 이슈로 블로그 썸네일 수집은 포기...
                 # Request
-                # _url = item['thumbnailUrl']
+                _url = item['thumbnailUrl']
 
                 # 블로그 썸네일이 있으면 다운로드
-                # if _url:
-                #     time.sleep(get_random_sleep())
+                if _url:
+                    time.sleep(get_random_sleep())
 
-                #     while True:
-                #         _response = requests.get(_url, headers={ 'user-agent': user_agent })
-                #         if _response.status_code == 200 or _response.status_code == 404: break
-                #         time.sleep(10)
+                    while True:
+                        _response = requests.get(_url, headers={ 'user-agent': user_agent })
+                        if _response.status_code == 200 or _response.status_code == 404: break
+                        time.sleep(10)
 
-                #     if _response.status_code == 200:
-                #         pb_thumbnail = '/images/places/' + str(p_id) + '/blog/' + generate_random_id() + '.jpg'
-                #         image_file = open('public' + pb_thumbnail, 'wb')
-                #         image_file.write(_response.content)
-                #         image_file.close()
+                    if _response.status_code == 200:
+                        pb_thumbnail = '/images/places/' + str(p_id) + '/blog/' + generate_random_id() + '.jpg'
+                        image_file = open('public' + pb_thumbnail, 'wb')
+                        image_file.write(_response.content)
+                        image_file.close()
 
-                #         query = "UPDATE t_crawlers SET c_image_count = c_image_count + 1, c_updated_date = NOW() WHERE c_id = %s"
-                #         cursor.execute(query, (c_id))
-                #         conn.commit()
+                        query = "UPDATE t_crawlers SET c_image_count = c_image_count + 1, c_updated_date = NOW() WHERE c_id = %s"
+                        cursor.execute(query, (c_id))
+                        conn.commit()
 
                 blog = [
                     p_id,
@@ -334,7 +333,7 @@ def main(argv):
                 ]
                 blog_list.append(blog)
 
-                progress += 45 / maxItemCount
+                progress += 60 / maxItemCount
                 if progress > 99: progress = 99
                 query = "UPDATE t_crawlers SET c_progress = %s, c_blog_count = c_blog_count + 1, c_updated_date = NOW() WHERE c_id = %s"
                 cursor.execute(query, (progress, c_id))
