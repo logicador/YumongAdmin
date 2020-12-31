@@ -288,6 +288,9 @@ def main(argv):
             if len(items) == 0: break
             
             for item in items:
+                # 카페 수집 X
+                if 'cafe.naver.com' in item['url']: continue
+
                 writed_date_splited = item['date'].split('.')
 
                 if len(writed_date_splited) > 1:
