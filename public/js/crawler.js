@@ -168,7 +168,7 @@ function updateCrawlers() {
             let pNameValue = divCrawler.querySelector('.name').querySelector('.value');
             let pCategoryValue = divCrawler.querySelector('.category').querySelector('.value');
             let pAddressValue = divCrawler.querySelector('.address').querySelector('.value');
-            // let pBlogCountValue = divCrawler.querySelector('.blog-count').querySelector('.value');
+            let pBlogCountValue = divCrawler.querySelector('.blog-count').querySelector('.value');
             let pImageCountValue = divCrawler.querySelector('.image-count').querySelector('.value');
             let pCreatedDateValue = divCrawler.querySelector('.created-date').querySelector('.value');
             let pUpdatedDateValue = divCrawler.querySelector('.updated-date').querySelector('.value');
