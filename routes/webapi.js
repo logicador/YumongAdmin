@@ -41,12 +41,15 @@ router.post('/start/crawling', function(req, res) {
 
             conn.release();
 
-            let cmd = 'python3 ~/VSCodeProjects/YumongAdmin';
+            let cmd = 'python D:/YumongAdmin';
             if (process.platform == 'darwin') {
-                cmd = 'python D:/YumongAdmin';
+                cmd = 'python3 ~/VSCodeProjects/YumongAdmin';
             }
 
             let command = cmd + '/python/naver.py';
+
+            console.log(command, result.insertId);
+
             exec(command + ' ' + result.insertId, (error, stdout, stderr) => {
                 if (error) {
                     console.log(error);
