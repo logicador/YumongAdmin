@@ -77,8 +77,8 @@ def main():
         if pbCnt: continue
 
         user_agent = get_user_agent()
-        p_id = result['p_id']
-        p_n_id = result['p_n_id']
+        p_id = str(result['p_id'])
+        p_n_id = str(result['p_n_id'])
         
         url = 'https://pcmap-api.place.naver.com/graphql'
         today = date.today().strftime("%Y%m%d")
