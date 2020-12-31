@@ -22,10 +22,8 @@ function intComma(value) {
 
 
 function toggleSideMenu() {
-    let overlay = document.querySelector('.js-div-overlay');
-
     if (navSideMenu.classList.contains('mobile')) {
-        overlay.remove();
+        document.querySelector('.js-div-overlay').remove();
         navSideMenu.classList.remove('mobile');
     } else {
         let html = '<div class="js-div-overlay overlay" onclick="toggleSideMenu()"></div>';
@@ -65,8 +63,7 @@ function initCommon() {
         
         if (width > 800) {
             if (navSideMenu.classList.contains('mobile')) {
-                let overlay = document.querySelector('.js-div-overlay');
-                overlay.remove();
+                document.querySelector('.js-div-overlay').remove();
                 navSideMenu.classList.remove('mobile');
             }
         }
