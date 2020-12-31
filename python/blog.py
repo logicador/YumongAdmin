@@ -157,6 +157,8 @@ def main():
         cursor.executemany(query, blog_list)
         conn.commit()
 
+        print(result['p_id'], result['p_name'])
+
 
 if __name__ == '__main__':
     main()
