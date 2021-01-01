@@ -25,6 +25,7 @@ router.post('/start/crawling', function(req, res) {
     getConnection((error, conn) => {
         if (error) {
             console.log(error);
+            conn.release();
             res.json({ status: 'ERR_MYSQL_POOL' });
             return;
         }
@@ -35,11 +36,10 @@ router.post('/start/crawling', function(req, res) {
         conn.query(query, params, (error, result) => {
             if (error) {
                 console.log(error);
+                conn.release();
                 res.json({ status: 'ERR_MYSQL' });
                 return;
             }
-
-            conn.release();
 
             let cmd = 'python D:/YumongAdmin';
             if (process.platform == 'darwin') {
@@ -58,6 +58,7 @@ router.post('/start/crawling', function(req, res) {
                 }
             });
 
+            conn.release();
             res.json({ status: 'OK' });
         });
     });
@@ -106,6 +107,7 @@ router.get('/get/crawlers', function(req, res) {
     getConnection((error, conn) => {
         if (error) {
             console.log(error);
+            conn.release();
             res.json({ status: 'ERR_MYSQL_POOL' });
             return;
         }
@@ -113,6 +115,7 @@ router.get('/get/crawlers', function(req, res) {
         conn.query(query, params, (error, result) => {
             if (error) {
                 console.log(error);
+                conn.release();
                 res.json({ status: 'ERR_MYSQL' });
                 return;
             }
@@ -123,12 +126,12 @@ router.get('/get/crawlers', function(req, res) {
             conn.query(query, params, (error, result) => {
                 if (error) {
                     console.log(error);
+                    conn.release();
                     res.json({ status: 'ERR_MYSQL' });
                     return;
                 }
 
                 conn.release();
-    
                 res.json({ status: 'OK', result: {
                     totalCount: result[0].totalCount,
                     crawlerList: crawlerList
@@ -174,6 +177,7 @@ router.post('/get/crawler/progress', function(req, res) {
     getConnection((error, conn) => {
         if (error) {
             console.log(error);
+            conn.release();
             res.json({ status: 'ERR_MYSQL_POOL' });
             return;
         }
@@ -181,13 +185,93 @@ router.post('/get/crawler/progress', function(req, res) {
         conn.query(query, params, (error, result) => {
             if (error) {
                 console.log(error);
+                conn.release();
                 res.json({ status: 'ERR_MYSQL' });
                 return;
             }
 
             conn.release();
-    
             res.json({ status: 'OK', result: result });
+        });
+    });
+});
+
+
+router.get('/get/places', (req, res) => {
+
+    if (!req.session.isAdmin) {
+        res.json({ status: 'ERR_PERMISSION' });
+        return;
+    }
+
+    let pName = req.query.pName;
+    let pLocCode = req.query.pLocCode;
+    let cLocCode = req.query.cLocCode;
+    let page = req.query.page;
+    let count = 20;
+
+    if (f.isNone(pLocCode)) pLocCode = 'ALL';
+    if (f.isNone(cLocCode)) cLocCode = 'ALL';
+
+    if (f.isNone(page)) page = 0;
+    page = parseInt(page);
+
+    getConnection((error, conn) => {
+        if (error) {
+            console.log(error);
+            conn.release();
+            res.json({ status: 'ERR_MYSQL_POOL' });
+            return;
+        }
+
+        let query = "";
+        query += "SELECT SQL_CALC_FOUND_ROWS pTab.*,";
+        query +=    " (SELECT COUNT(*) FROM t_place_images AS piTab WHERE pTab.p_id = piTab.pi_p_id) AS imageCnt,";
+        query +=    " (SELECT COUNT(*) FROM t_place_blogs AS pbTab WHERE pTab.p_id = pbTab.pb_p_id) AS blogCnt";
+        query += " FROM t__places AS pTab WHERE 1 = 1";
+        let params = [];
+        if (!f.isNone(pName)) {
+            query += " AND p_keywords LIKE ?";
+            params.push('%' + pName + '%');
+        }
+        if (pLocCode != 'ALL') {
+            query += " AND p_ploc_code LIKE ?";
+            params.push(pLocCode);
+        }
+        if (cLocCode != 'ALL') {
+            query += " AND p_cloc_code LIKE ?";
+            params.push(cLocCode);
+        }
+
+        query += " LIMIT ?, ?";
+        params.push(page * count);
+        params.push(count);
+
+        conn.query(query, params, (error, result) => {
+            if (error) {
+                console.log(error);
+                conn.release();
+                res.json({ status: 'ERR_MYSQL' });
+                return;
+            }
+
+            let placeList = result;
+
+            query = "SELECT FOUND_ROWS() AS totalCount";
+            conn.query(query, params, (error, result) => {
+                if (error) {
+                    console.log(error);
+                    conn.release();
+                    res.json({ status: 'ERR_MYSQL' });
+                    return;
+                }
+
+                conn.release();
+                res.json({ status: 'OK', result: {
+                    totalCount: result[0].totalCount,
+                    placeList: placeList
+                }});
+            });
         });
     });
 });
@@ -211,6 +295,7 @@ router.post('/remove/crawler', (req, res) => {
     getConnection((error, conn) => {
         if (error) {
             console.log(error);
+            conn.release();
             res.json({ status: 'ERR_MYSQL_POOL' });
             return;
         }
@@ -218,12 +303,12 @@ router.post('/remove/crawler', (req, res) => {
         conn.query(query, params, (error, result) => {
             if (error) {
                 console.log(error);
+                conn.release();
                 res.json({ status: 'ERR_MYSQL' });
                 return;
             }
 
             conn.release();
-    
             res.json({ status: 'OK' });
         });
     });

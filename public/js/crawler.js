@@ -1,7 +1,6 @@
 
-const html = document.querySelector('html');
+// const html = document.querySelector('html');
 const divRefresh = document.querySelector('.js-div-refresh');
-const divCrawlingBox = document.querySelector('.js-div-crawling-box');
 const inputCPNId = document.querySelector('.js-input-c-p-n-id');
 const buttonStartCrawling = document.querySelector('.js-button-start-crawling');
 const divCrawlerList = document.querySelector('.js-div-crawler-list');
@@ -204,9 +203,9 @@ function getCrawlerHtml(crawler) {
             html += '<div class="js-div-recrawling control recrawling"><i class="fab fa-python"></i></div>';
         }
         html += '<div class="rows">';
-            html += '<div class="row"><p class="col">CID</p>';
-                html += '<p class="value">' + crawler.c_id + '</p>';
-            html += '</div>';
+            // html += '<div class="row"><p class="col">CID</p>';
+            //     html += '<p class="value">' + crawler.c_id + '</p>';
+            // html += '</div>';
             // html += '<div class="row pid"><p class="col">PID</p>';
             //     if (crawler.c_status == 'RUNNING' || crawler.c_status == 'FINISHED') {
             //         html += '<p class="value">' + noneToDash(crawler.p_id) + '</p>';

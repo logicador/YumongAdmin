@@ -158,6 +158,7 @@ def main(argv):
         conn.commit()
 
         p_name = c_p_name
+        p_keywords = c_p_name + "|" + p_name.replace(' ', '')
         p_category = c_p_category
 
         p_thumbnail = ''
@@ -250,12 +251,12 @@ def main(argv):
         # MYSQL INSERT 플레이스
         query = """
             INSERT INTO t__places 
-                (p_n_id, p_name, p_category, p_thumbnail, p_latitude, p_longitude, 
-                p_geometry, p_address, p_road_address, p_phone, p_data ,p_ploc_code, p_cloc_code) 
+                (p_n_id, p_name, p_keywords, p_category, p_thumbnail, p_latitude, p_longitude, 
+                p_geometry, p_address, p_road_address, p_phone, p_ploc_code, p_cloc_code, p_data) 
             VALUES 
                 (%s, %s, %s, %s, %s, %s, POINT(%s, %s), %s, %s, %s, %s, %s, %s)
         """
-        cursor.execute(query, (p_n_id, p_name, p_category, p_thumbnail, p_latitude, p_longitude, p_longitude, p_latitude, p_address, p_road_address, p_phone, p_data, p_ploc_code, p_cloc_code))
+        cursor.execute(query, (p_n_id, p_name, p_keywords, p_category, p_thumbnail, p_latitude, p_longitude, p_longitude, p_latitude, p_address, p_road_address, p_phone, p_ploc_code, p_cloc_code, p_data))
         conn.commit()
 
         p_id = cursor.lastrowid

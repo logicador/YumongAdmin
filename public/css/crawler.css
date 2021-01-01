@@ -82,6 +82,7 @@
 
 .wrapper.crawler .crawler-list {
     margin-top: 32px;
+    font-size: 0;
 }
 .wrapper.crawler .crawler-list .crawler {
     margin-bottom: 32px;
@@ -117,7 +118,7 @@
     cursor: pointer;
     width: 50px;
     height: 50px;
-    background: #333333;
+    background: rgba(0, 0, 0, 0.4);
     border-radius: 50%;
 }
 .wrapper.crawler .crawler-list .crawler .control.remove {
