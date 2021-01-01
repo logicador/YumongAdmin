@@ -6,6 +6,7 @@ const inputCPNId = document.querySelector('.js-input-c-p-n-id');
 const buttonStartCrawling = document.querySelector('.js-button-start-crawling');
 const divCrawlerList = document.querySelector('.js-div-crawler-list');
 const selectStatus = document.querySelector('.js-select-status');
+const selectAdmin = document.querySelector('.js-select-admin');
 const buttonMoreCrawler = document.querySelector('.js-button-more-crawler');
 const divRowCount = document.querySelector('.js-div-row-count');
 // let isEndOfCrawler = false;
@@ -29,9 +30,7 @@ function startCrawling(cPNId) {
 
         inputCPNId.value = '';
         selectStatus.value = 'RUNNING';
-        divCrawlerList.innerHTML = '';
-        // isEndOfCrawler = false;
-        page = 0;
+        resetCrawlerList();
         getCrawlers();
     });
 }
@@ -40,6 +39,7 @@ function startCrawling(cPNId) {
 function getCrawlers() {
     fetch('/webapi/get/crawlers?' + new URLSearchParams({
         cStatus: selectStatus.value,
+        cAdmin: selectAdmin.value,
         page: page
     }))
     .then(function(data) { return data.json(); })
@@ -140,7 +140,8 @@ function updateCrawlers() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-            cIdList: cIdList
+            cIdList: cIdList,
+            cAdmin: selectAdmin.value
         })
     })
     .then(function(data) { return data.json(); })
@@ -164,6 +165,7 @@ function updateCrawlers() {
             
             let divProgress = divCrawler.querySelector('.progress');
             let divProgressSpan = divProgress.querySelector('span');
+            let pPIdValue = divCrawler.querySelector('.pid').querySelector('.value');
             let pNIdValue = divCrawler.querySelector('.nid').querySelector('.value');
             let pNameValue = divCrawler.querySelector('.name').querySelector('.value');
             let pCategoryValue = divCrawler.querySelector('.category').querySelector('.value');
@@ -176,6 +178,7 @@ function updateCrawlers() {
             // update value
             divProgress.style.width = ((crawler.c_progress < 10) ? '' : crawler.c_progress + '%');
             divProgressSpan.innerText = crawler.c_progress + '%';
+            pPIdValue.innerText = crawler.p_id;
             pNIdValue.innerText = crawler.c_p_n_id;
             pNameValue.innerText = crawler.c_p_name;
             pCategoryValue.innerText = crawler.c_p_category;
@@ -201,8 +204,15 @@ function getCrawlerHtml(crawler) {
             html += '<div class="js-div-recrawling control recrawling"><i class="fab fa-python"></i></div>';
         }
         html += '<div class="rows">';
-            html += '<div class="row"><p class="col">ID</p>';
+            html += '<div class="row"><p class="col">CID</p>';
                 html += '<p class="value">' + crawler.c_id + '</p>';
+            html += '</div>';
+            html += '<div class="row pid"><p class="col">PID</p>';
+                if (crawler.c_status == 'RUNNING' || crawler.c_status == 'FINISHED') {
+                    html += '<p class="value">' + noneToDash(crawler.p_id) + '</p>';
+                } else {
+                    html += '<p class="value">-</p>';
+                }
             html += '</div>';
             html += '<div class="row nid"><p class="col">NID</p>';
                 html += '<p class="value">' + noneToDash(crawler.c_p_n_id) + '</p>';
@@ -253,11 +263,16 @@ function getNoDataHtml() {
 }
 
 
+function resetCrawlerList() {
+    divCrawlerList.innerHTML = '';
+    page = 0;
+}
+
+
 function initCrawler() {
 
     divRefresh.addEventListener('click', function() {
-        divCrawlerList.innerHTML = '';
-        page = 0;
+        resetList();
         getCrawlers();
     });
 
@@ -310,9 +325,12 @@ function initCrawler() {
     });
 
     selectStatus.addEventListener('change', function() {
-        divCrawlerList.innerHTML = '';
-        // isEndOfCrawler = false;
-        page = 0;
+        resetCrawlerList();
+        getCrawlers();
+    });
+
+    selectAdmin.addEventListener('change', function() {
+        resetCrawlerList();
         getCrawlers();
     });
 

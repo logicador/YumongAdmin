@@ -55,8 +55,9 @@
 }
 
 .wrapper.crawler .filter-wrapper {
-    margin-top: 32px;
+    margin-top: 32px; 
     position: relative;
+    font-size: 0;
 }
 .wrapper.crawler .filter-wrapper select {
     font-size: 1.2rem;
@@ -65,6 +66,7 @@
     border-radius: 4px;
     background: #777777 url(/img/chevron-down.svg) no-repeat calc(100% - 12px) 50%;
     background-size: 18px auto;
+    margin-right: 32px;
 }
 .wrapper.crawler .filter-wrapper .row-count {
     font-size: 1.2rem;
@@ -255,6 +257,9 @@
     .wrapper.crawler .filter-wrapper {
         margin-top: 24px;
     }
+    .wrapper.crawler .filter-wrapper select {
+        margin-right: 24px;
+    }
     .wrapper.crawler .crawler-list {
         margin-top: 24px;
     }
@@ -283,6 +288,9 @@
     }
     .wrapper.crawler .filter-wrapper {
         margin-top: 16px;
+    }
+    .wrapper.crawler .filter-wrapper select {
+        margin-right: 16px;
     }
     .wrapper.crawler .crawler-list {
         margin-top: 16px;

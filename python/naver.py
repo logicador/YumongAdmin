@@ -2,6 +2,7 @@ import sys
 import requests
 import pymysql
 import os
+import json
 import random
 import traceback
 import time
@@ -172,15 +173,89 @@ def main(argv):
         except: pass
         p_data = str(n_place)
 
+        splited_address = p_address.split(' ')
+        splited_road_address = p_road_address.split(' ')
+        p_ploc_code = ''
+        p_cloc_code = ''
+
+        parent_locations = dict()
+        location_dir = 'D:/YumongAdmin/'
+        if 'macOS' in platform.platform(): location_dir = '~/VSCodeProjects/YumongAdmin/'
+        with open(os.path.expanduser(location_dir + 'parent_location.json'), encoding='utf-8') as f:
+            parent_locations = json.load(f)
+
+        # 부모 지역코드 세팅
+        for key, value in parent_locations.items():
+            if len(splited_address) == 0: break
+            
+            pname = splited_address[0]
+
+            code = key
+            name = value['name']
+            mname = value['mname']
+            sname = value['sname']
+
+            if name == pname or mname == pname or sname == pname:
+                p_ploc_code = code
+                break
+
+        if p_ploc_code == '':
+            for key, value in parent_locations.items():
+                if len(splited_road_address) == 0: break
+                
+                pname = splited_road_address[0]
+
+                code = key
+                name = value['name']
+                mname = value['mname']
+                sname = value['sname']
+
+                if name == pname or mname == pname or sname == pname:
+                    p_ploc_code = code
+                    break
+
+        if p_ploc_code != '':
+            child_locations = dict()
+            with open(os.path.expanduser(location_dir + 'child_location.json'), encoding='utf-8') as f:
+                child_locations = json.load(f)
+            selected_child_locations = child_locations[p_ploc_code]
+            # 자식 지역코드 세팅
+            for cloc in selected_child_locations:
+                if len(splited_address) == 0: break
+
+                cname = splited_address[1]
+
+                code = cloc['code']
+                name = cloc['name']
+                sname = cloc['sname']
+                
+                if name == cname or sname == cname:
+                    p_cloc_code = code
+                    break
+
+            if p_cloc_code == '':
+                for cloc in selected_child_locations:
+                    if len(splited_road_address) == 0: break
+
+                    cname = splited_road_address[1]
+
+                    code = cloc['code']
+                    name = cloc['name']
+                    sname = cloc['sname']
+                    
+                    if name == cname or sname == cname:
+                        p_cloc_code = code
+                        break
+
         # MYSQL INSERT 플레이스
         query = """
             INSERT INTO t__places 
                 (p_n_id, p_name, p_category, p_thumbnail, p_latitude, p_longitude, 
-                p_geometry, p_address, p_road_address, p_phone, p_data) 
+                p_geometry, p_address, p_road_address, p_phone, p_data ,p_ploc_code, p_cloc_code) 
             VALUES 
-                (%s, %s, %s, %s, %s, %s, POINT(%s, %s), %s, %s, %s, %s)
+                (%s, %s, %s, %s, %s, %s, POINT(%s, %s), %s, %s, %s, %s, %s, %s)
         """
-        cursor.execute(query, (p_n_id, p_name, p_category, p_thumbnail, p_latitude, p_longitude, p_longitude, p_latitude, p_address, p_road_address, p_phone, p_data))
+        cursor.execute(query, (p_n_id, p_name, p_category, p_thumbnail, p_latitude, p_longitude, p_longitude, p_latitude, p_address, p_road_address, p_phone, p_data, p_ploc_code, p_cloc_code))
         conn.commit()
 
         p_id = cursor.lastrowid

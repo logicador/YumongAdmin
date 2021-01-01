@@ -78,7 +78,7 @@ global.c = {}; // 상수
 
 // none check
 global.f.isNone = function(value) {
-    if (typeof value == 'undefined' || value == null || value == '') return true;
+    if (typeof value === 'undefined' || value === null || value === '') return true;
     return false;
 };
 
