@@ -331,8 +331,7 @@ def main(argv):
                     item['contents'],
                     item['url'],
                     pb_thumbnail,
-                    writed_date.strftime("%Y-%m-%d"),
-                    str(item)
+                    writed_date.strftime("%Y-%m-%d")
                 ]
                 blog_list.append(blog)
 
@@ -345,9 +344,9 @@ def main(argv):
         # MYSQL INSERT 블로그
         query = """
             INSERT INTO t_place_blogs 
-                (pb_p_id, pb_title, pb_name, pb_contents, pb_url, pb_thumbnail, pb_writed_date, pb_data) 
+                (pb_p_id, pb_title, pb_name, pb_contents, pb_url, pb_thumbnail, pb_writed_date) 
             VALUES 
-                (%s, %s, %s, %s, %s, %s, %s, %s)
+                (%s, %s, %s, %s, %s, %s, %s)
         """
         cursor.executemany(query, blog_list)
         conn.commit()
