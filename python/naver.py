@@ -179,8 +179,8 @@ def main(argv):
         p_cloc_code = ''
 
         parent_locations = dict()
-        location_dir = 'D:/YumongAdmin/'
-        if 'macOS' in platform.platform(): location_dir = '~/VSCodeProjects/YumongAdmin/'
+        location_dir = 'D:/YumongAdmin/python/'
+        if 'macOS' in platform.platform(): location_dir = '~/VSCodeProjects/YumongAdmin/python/'
         with open(os.path.expanduser(location_dir + 'parent_location.json'), encoding='utf-8') as f:
             parent_locations = json.load(f)
 

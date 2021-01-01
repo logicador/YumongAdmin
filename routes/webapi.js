@@ -85,7 +85,7 @@ router.get('/get/crawlers', function(req, res) {
 
     page = parseInt(page);
 
-    let query = "SELECT SQL_CALC_FOUND_ROWS cTab.*, pTab.p_id FROM t_crawlers AS cTab JOIN t__places AS pTab ON pTab.p_n_id = cTab.c_p_n_id WHERE 1=1";
+    let query = "SELECT SQL_CALC_FOUND_ROWS * FROM t_crawlers WHERE 1=1";
     let params = [];
     if (cStatus != 'ALL') {
         query += " AND c_status = ?";
@@ -159,7 +159,7 @@ router.post('/get/crawler/progress', function(req, res) {
         return;
     }
 
-    let query = "SELECT cTab.*, pTab.p_id FROM t_crawlers AS cTab JOIN t__places AS pTab ON pTab.p_n_id = cTab.c_p_n_id WHERE 1=1";
+    let query = "SELECT * FROM t_crawlers WHERE 1=1";
     let params = [];
     for (let i = 0; i < cIdList.length; i++) {
         query += " OR c_id = ?";

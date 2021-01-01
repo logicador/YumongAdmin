@@ -165,7 +165,7 @@ function updateCrawlers() {
             
             let divProgress = divCrawler.querySelector('.progress');
             let divProgressSpan = divProgress.querySelector('span');
-            let pPIdValue = divCrawler.querySelector('.pid').querySelector('.value');
+            // let pPIdValue = divCrawler.querySelector('.pid').querySelector('.value');
             let pNIdValue = divCrawler.querySelector('.nid').querySelector('.value');
             let pNameValue = divCrawler.querySelector('.name').querySelector('.value');
             let pCategoryValue = divCrawler.querySelector('.category').querySelector('.value');
@@ -178,7 +178,7 @@ function updateCrawlers() {
             // update value
             divProgress.style.width = ((crawler.c_progress < 10) ? '' : crawler.c_progress + '%');
             divProgressSpan.innerText = crawler.c_progress + '%';
-            pPIdValue.innerText = crawler.p_id;
+            // pPIdValue.innerText = crawler.p_id;
             pNIdValue.innerText = crawler.c_p_n_id;
             pNameValue.innerText = crawler.c_p_name;
             pCategoryValue.innerText = crawler.c_p_category;
@@ -207,13 +207,13 @@ function getCrawlerHtml(crawler) {
             html += '<div class="row"><p class="col">CID</p>';
                 html += '<p class="value">' + crawler.c_id + '</p>';
             html += '</div>';
-            html += '<div class="row pid"><p class="col">PID</p>';
-                if (crawler.c_status == 'RUNNING' || crawler.c_status == 'FINISHED') {
-                    html += '<p class="value">' + noneToDash(crawler.p_id) + '</p>';
-                } else {
-                    html += '<p class="value">-</p>';
-                }
-            html += '</div>';
+            // html += '<div class="row pid"><p class="col">PID</p>';
+            //     if (crawler.c_status == 'RUNNING' || crawler.c_status == 'FINISHED') {
+            //         html += '<p class="value">' + noneToDash(crawler.p_id) + '</p>';
+            //     } else {
+            //         html += '<p class="value">-</p>';
+            //     }
+            // html += '</div>';
             html += '<div class="row nid"><p class="col">NID</p>';
                 html += '<p class="value">' + noneToDash(crawler.c_p_n_id) + '</p>';
             html += '</div>';
@@ -272,7 +272,7 @@ function resetCrawlerList() {
 function initCrawler() {
 
     divRefresh.addEventListener('click', function() {
-        resetList();
+        resetCrawlerList();
         getCrawlers();
     });
 
