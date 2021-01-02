@@ -39,7 +39,7 @@ function getPlaceList() {
             let place = placeList[i];
 
             html += '<a href="javascript:void(0)"><div class="js-div-place place">';
-            html +=     '<div class="image" style="background-image: url(http://yumong-admin.asuscomm.com' + place.p_thumbnail + '), url(/img/no_image.png);">';
+            html +=     '<div class="image" style="background-image: url(' + place.p_thumbnail + '), url(/img/no_image.png);">';
             html +=         '<div class="count-wrapper image-cnt"><i class="fas fa-camera"></i>' + place.imageCnt + '</div>';
             html +=     '</div>';
             html +=     '<div class="desc-wrapper">';
