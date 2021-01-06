@@ -2,6 +2,31 @@ var express = require('express');
 var router = express.Router();
 const exec = require('child_process').exec;
 const getConnection = require('../base/database');
+const pool = require('../base/database');
+
+
+// router.get('/test', async (req, res) => {
+//     try {
+//         let query = "SELECT * FROM t_crawlers WHERE c_id = ?";
+//         let params = [133];
+//         const [result1, fields1] = await pool.query(query, params);
+    
+//         // let crawler = null;
+//         // if (result1.length > 0) crawler = result1[0];
+    
+//         query = "SELECT * FROM t__places DWHERE p_id = ?";
+//         params = [2];
+//         const [result2, fields2] = await pool.query(query, params);
+    
+//         // let place = null;
+//         // if (result2.length > 0) place = result2[0];
+
+//         res.json({ status: 'OK', result: result1 });
+//     } catch (err) {
+//         console.log(err);
+//         res.json({ status: 'ERR' });
+//     }
+// });
 
 
 router.post('/start/crawling', function(req, res) {
