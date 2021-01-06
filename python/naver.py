@@ -8,8 +8,30 @@ import traceback
 import time
 import shutil
 import platform
+from PIL import Image
 from itertools import count
 from datetime import date, timedelta, datetime
+
+
+def resize(originpath, resizepath):
+    p = 0
+    while True:
+        filesize = os.path.getsize(os.path.expanduser(resizepath))
+        if filesize > 200000:
+            p = p + 2
+            Image.MAX_IMAGE_PIXELS = None
+            im = Image.open(os.path.expanduser(originpath))
+            w, h = im.size
+            rw = int(w * ((100 - p) / 100))
+            rh = int(h * ((100 - p) / 100))
+            rim = im.resize((rw, rh), Image.ANTIALIAS)
+            rim.convert('RGB').save(os.path.expanduser(resizepath), 'JPEG', quality=95)
+        else: break
+
+
+def get_name(file):
+    splited = file.split('.')
+    return splited[0]
 
 
 def get_env_path():
@@ -315,7 +337,7 @@ def main(argv):
                 is_set_thumbnail = True
 
             image_list.append([p_id, image_path])
-            progress += 30 / len(images)
+            progress += 15 / len(images)
             query = "UPDATE t_crawlers SET c_progress = %s, c_image_count = c_image_count + 1, c_updated_date = NOW() WHERE c_id = %s"
             cursor.execute(query, (progress, c_id))
             conn.commit()
@@ -411,7 +433,7 @@ def main(argv):
                 ]
                 blog_list.append(blog)
 
-                progress += 60 / maxItemCount
+                progress += 25 / maxItemCount
                 if progress > 99: progress = 99
                 query = "UPDATE t_crawlers SET c_progress = %s, c_blog_count = c_blog_count + 1, c_updated_date = NOW() WHERE c_id = %s"
                 cursor.execute(query, (progress, c_id))
@@ -428,6 +450,39 @@ def main(argv):
         conn.commit()
 
         # End 블로그 후기
+
+
+        # Start 이미지 리사이징
+        image_dir = 'D:/YumongAdmin/public/images/places/' + p_id
+        if 'macOS' in platform.platform(): image_dir = '~/VSCodeProjects/YumongAdmin/public/images/places/' + p_id
+        _file_list = os.listdir(os.path.expanduser(image_dir))
+        for _file in _file_list:
+
+            if _file == 'blog':
+                blog_list = os.listdir(os.path.expanduser(image_dir + 'blog'))
+                for blog in blog_list:
+                    name = get_name(blog)
+                    shutil.copy2(os.path.expanduser(image_dir + 'blog/' + blog), image_dir + 'blog/' + name + '_origin.jpg')
+                    resize(image_dir + 'blog/' + name + '_origin.jpg', image_dir + 'blog/' + blog)
+                    os.remove(image_dir + 'blog/' + name + '_origin.jpg')
+
+
+            elif _file == 'thumbnail.jpg':
+                shutil.copy2(os.path.expanduser(image_dir + _file), image_dir + 'thumbnail_origin.jpg')
+                resize(image_dir + 'thumbnail_origin.jpg', image_dir + _file)
+
+            else:
+                name = get_name(_file)
+                shutil.copy2(os.path.expanduser(image_dir + _file), image_dir + name + '_origin.jpg')
+                resize(image_dir + name + '_origin.jpg', image_dir + _file)
+        
+            progress += 50 / maxItemCount
+            if progress > 99: progress = 99
+            query = "UPDATE t_crawlers SET c_progress = %s, c_blog_count = c_blog_count + 1, c_updated_date = NOW() WHERE c_id = %s"
+            cursor.execute(query, (progress, c_id))
+            conn.commit()
+        # End 이미지 리사이징
+
 
         query = "UPDATE t_crawlers SET c_progress = %s, c_status = %s, c_updated_date = NOW() WHERE c_id = %s"
         cursor.execute(query, (100, 'FINISHED', c_id))
